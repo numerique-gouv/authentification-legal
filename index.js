@@ -13,7 +13,6 @@ app.use(logger);
 
 const legalControllerFactory = (fileId) => async (req, res, next) => {
   try {
-    console.log(fileId, "fileId");
     const htmlContent = await exportMemoizedGoogleDoc(fileId);
 
     return res.send(htmlContent);
