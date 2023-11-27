@@ -3,7 +3,11 @@ import express from "express";
 import morgan from "morgan";
 import "dotenv/config.js";
 
-const { MCP_CONVENTION_D_ADHESION_ID } = process.env;
+const {
+  MCP_CONVENTION_D_ADHESION_ID,
+  MCP_POLITIQUE_DE_CONFIDENTIALITE_ID,
+  MCP_CONDITIONS_GENERALES_D_UTILISATION_ID,
+} = process.env;
 const PORT = parseInt(process.env.PORT, 10) || 3000;
 
 const app = express();
@@ -22,8 +26,16 @@ const legalControllerFactory = (fileId) => async (req, res, next) => {
 };
 
 app.get(
-  "/mcp-convention-d-adhesion",
+  "/moncomptepro-convention-d-adhesion",
   legalControllerFactory(MCP_CONVENTION_D_ADHESION_ID),
+);
+app.get(
+  "/moncomptepro-politique-de-confidentialite",
+  legalControllerFactory(MCP_POLITIQUE_DE_CONFIDENTIALITE_ID),
+);
+app.get(
+  "/moncomptepro-conditions-generales-d-utilisation",
+  legalControllerFactory(MCP_CONDITIONS_GENERALES_D_UTILISATION_ID),
 );
 
 app.listen(PORT, () => {
