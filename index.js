@@ -14,6 +14,9 @@ const app = express();
 
 const logger = morgan("combined");
 app.use(logger);
+app.get("/favicon.ico", (req, res, next) =>
+  res.sendFile("favicon.ico", { root: "." }),
+);
 
 const legalControllerFactory = (fileId) => async (req, res, next) => {
   try {
