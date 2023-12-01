@@ -28,7 +28,7 @@ const exportGoogleDoc = async (fileId) => {
     { responseType: "stream" },
   );
 
-  return new Promise((resolve, reject) => {
+  const content = await new Promise((resolve, reject) => {
     let htmlContent = "";
     response.data
       .on("data", (data) => {
@@ -42,6 +42,10 @@ const exportGoogleDoc = async (fileId) => {
         reject(err);
       });
   });
+
+  const regex = /@import url\(https:\/\/themes\.googleusercontent\.com[^)]*\)/;
+
+  return content.replace(regex, "");
 };
 
 export const exportMemoizedGoogleDoc = memoize(exportGoogleDoc);
