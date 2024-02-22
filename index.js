@@ -7,6 +7,7 @@ const {
   MCP_CONVENTION_D_ADHESION_ID,
   MCP_POLITIQUE_DE_CONFIDENTIALITE_ID,
   MCP_CONDITIONS_GENERALES_D_UTILISATION_ID,
+  MCP_ACCESSIBILITE_ID,
 } = process.env;
 const PORT = parseInt(process.env.PORT, 10) || 3000;
 
@@ -39,6 +40,10 @@ app.get(
 app.get(
   "/moncomptepro-conditions-generales-d-utilisation",
   legalControllerFactory(MCP_CONDITIONS_GENERALES_D_UTILISATION_ID),
+);
+app.get(
+  "/moncomptepro-accessibilite",
+  legalControllerFactory(MCP_ACCESSIBILITE_ID),
 );
 
 app.listen(PORT, () => {
