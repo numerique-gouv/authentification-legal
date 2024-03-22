@@ -8,6 +8,7 @@ const {
   MCP_POLITIQUE_DE_CONFIDENTIALITE_ID,
   MCP_CONDITIONS_GENERALES_D_UTILISATION_ID,
   MCP_ACCESSIBILITE_ID,
+  MCP_APP_URL,
 } = process.env;
 const PORT = parseInt(process.env.PORT, 10) || 3000;
 
@@ -15,15 +16,23 @@ const app = express();
 
 const logger = morgan("combined");
 app.use(logger);
+app.use(
+  "/public",
+  express.static("public", { maxAge: 7 * 24 * 60 * 60 * 1000 })
+);
 app.get("/favicon.ico", (req, res, next) =>
   res.sendFile("favicon.ico", { root: "." }),
 );
+app.set("view engine", "ejs");
 
 const legalControllerFactory = (fileId) => async (req, res, next) => {
   try {
-    const htmlContent = await exportMemoizedGoogleDoc(fileId);
-
-    return res.send(htmlContent);
+    const { title, body } = await exportMemoizedGoogleDoc(fileId);
+    return res.render("index", {
+      title,
+      body,
+      MCP_APP_URL: MCP_APP_URL.replace(/\/$/, ""),
+    });
   } catch (e) {
     return next(e);
   }

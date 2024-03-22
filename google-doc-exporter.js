@@ -1,5 +1,6 @@
 import { google } from "googleapis";
 import { memoize } from "lodash-es";
+import * as cheerio from "cheerio";
 import { CacheWithExpiration } from "./cache.js";
 import "dotenv/config.js";
 
@@ -18,7 +19,24 @@ const drive = google.drive({
   auth,
 });
 
+const getGoogleDocName = (fileId) => {
+  return drive.files.get({ fileId }).then((res) => {
+    return res.data.name;
+  });
+};
+
 const exportGoogleDoc = async (fileId) => {
+  const [filename, body] = await Promise.all([
+    getGoogleDocName(fileId),
+    getBody(fileId),
+  ]);
+  return {
+    title: filename.replace("MonComptePro - ", ""),
+    body: cleanHtmlContent(body),
+  };
+};
+
+const getBody = async (fileId) => {
   console.log(`Downloading doc ${fileId}...`);
   const response = await drive.files.export(
     {
@@ -46,6 +64,15 @@ const exportGoogleDoc = async (fileId) => {
   const regex = /@import url\(https:\/\/themes\.googleusercontent\.com[^)]*\)/;
 
   return content.replace(regex, "");
+};
+
+export const cleanHtmlContent = (html) => {
+  const $ = cheerio.load(html);
+  $("[style]").removeAttr("style");
+  $("[class]").removeAttr("class");
+  $("p").has("span:empty:first-child:last-child").remove();
+  $("table").addClass("fr-table");
+  return $("body").html() || "";
 };
 
 export const exportMemoizedGoogleDoc = memoize(exportGoogleDoc);

@@ -97,6 +97,11 @@ dist
 # https://nextjs.org/blog/next-9-1#public-directory-support
 # public
 
+# dsfr copied code from node_modules
+
+public/dsfr
+!public/dsfr/.keep
+
 # vuepress build output
 .vuepress/dist
 
