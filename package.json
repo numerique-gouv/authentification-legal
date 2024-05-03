@@ -19,7 +19,7 @@
     "@gouvfr/dsfr": "^1.11.2",
     "cheerio": "^1.0.0-rc.12",
     "dotenv": "^16.3.1",
-    "ejs": "^3.1.9",
+    "ejs": "^3.1.10",
     "express": "^4.18.2",
     "googleapis": "^128.0.0",
     "lodash-es": "^4.17.21",
