@@ -72,6 +72,10 @@ export const cleanHtmlContent = (html) => {
   $("[class]").removeAttr("class");
   $("p").has("span:empty:first-child:last-child").remove();
   $("table").addClass("fr-table");
+  $("table tr:first-of-type td").each(function(index, el) {
+    const newCell = $(el).contents().unwrap().wrap('<th>').closest('th').attr('scope', 'col')
+    $(el).replaceWith(newCell)
+  })
   return $("body").html() || "";
 };
 
