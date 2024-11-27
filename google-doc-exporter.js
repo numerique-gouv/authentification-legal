@@ -71,6 +71,7 @@ export const cleanHtmlContent = (html) => {
   $("[style]").removeAttr("style");
   $("[class]").removeAttr("class");
   $("p").has("span:empty:first-child:last-child").remove();
+  $("p:empty").remove();
   $("table").addClass("fr-table");
   $("table tr:first-of-type td").each(function(index, el) {
     const newCell = $(el).contents().unwrap().wrap('<th>').closest('th').attr('scope', 'col')
